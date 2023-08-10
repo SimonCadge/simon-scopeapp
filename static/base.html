@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <link rel="stylesheet" href={{ search_path + "/styles.css" }}>
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+        <title>Bubbleroom Report</title>
+    </head>
+    <body>
+        <div id="title" class="d-flex flex-column justify-content-evenly break-after keep-together p-5" style="width: 1900px; height: 1000px;">
+            <div class="d-flex flex-row justify-content-evenly">
+                <div class="d-flex flex-column" style="height: fit-content; margin-top: 500px;">
+                    <div class="heading">Dev Test Report Bubbleroom</div>
+                    <div class="date">{{ statistics.start_date }} - {{ statistics.end_date }}</div>
+                    <div>Based on {{ statistics.num_active_influencers }} influencers</div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column justify-content-evenly break-after keep-together p-5">
+            <div class="d-flex flex-row align-items-center mb-2">
+                <div class="heading">Overview</div>
+                <div class="date">{{ statistics.start_date }} - {{ statistics.end_date }}</div>
+            </div>
+            <div class="d-flex flex-row justify-content-evenly">
+                <table class="table table-borderless" style="width: 40%;" cellspacing="0">
+                    <tr>
+                        <td>Influencers with activity</td>
+                        <td>{{ "{:,}".format(statistics.num_active_influencers) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Posts</td>
+                        <td>{{ "{:,}".format(statistics.num_posts) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Post Mentions</td>
+                        <td>{{ "{:,}".format(statistics.num_post_mentions) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Hashtags #bubbleroom</td>
+                        <td>{{ "{:,}".format(statistics.num_bubbleroom_hashtags) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Hashtags #bubbleroomstyle</td>
+                        <td>{{ "{:,}".format(statistics.num_bubbleroomstyle_hashtags) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Photo tags</td>
+                        <td>{{ "{:,}".format(statistics.num_photo_tags) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Actual Reach</td>
+                        <td>{{ "{:,}".format(statistics.actual_reach) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Engagement</td>
+                        <td>{{ "{:.2f}".format(statistics.overall_engagement) }}%</td>
+                    </tr>
+                    <tr>
+                        <td>Likes</td>
+                        <td>{{ "{:,}".format(statistics.num_likes) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Comments</td>
+                        <td>{{ "{:,}".format(statistics.num_comments) }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex flex-column justify-content-evenly break-after p-5">
+            <div class="d-flex flex-row align-items-center mb-2">
+                <div class="heading">Influencers</div>
+                <div class="date">{{ statistics.start_date }} - {{ statistics.end_date }}</div>
+                {# TODO: Page Number? #}
+            </div>
+            <div class="d-flex flex-row justify-content-evenly">
+                <table class="table table-striped" cellspacing="0">
+                    <tr>
+                        <th>Influencers</th>
+                        <th>Followers</th>
+                        <th>Engagement (General)</th>
+                        <th>Engagement (Specific)</th>
+                        <th>Comments</th>
+                        <th>Likes</th>
+                        <th>Posts</th>
+                        <th>Post Mentions</th>
+                        <th>Post Hashtags</th>
+                        <th>Photo Tags</th>
+                        <th>Score</th>
+                    </tr>
+                    {% for user in user_statistics|sort(attribute='score', reverse=true) %}
+                        <tr>
+                            <td>{{ user.user.ig_username }}</td>
+                            <td>{{ "{:,}".format(user.user.ig_num_followers) }}</td>
+                            <td>{{ "{:.2f}".format(user.general_engagement) }}%</td>
+                            <td>{{ "{:.2f}".format(user.specific_engagement) }}%</td>
+                            <td>{{ "{:,}".format(user.num_comments) }}</td>
+                            <td>{{ "{:,}".format(user.num_likes) }}</td>
+                            <td>{{ "{:,}".format(user.num_posts) }}</td>
+                            <td>{{ "{:,}".format(user.num_post_mentions) }}</td>
+                            <td>{{ "{:,}".format(user.num_bubbleroom_hashtags + user.num_bubbleroomstyle_hashtags) }}</td>
+                            <td>{{ "{:,}".format(user.num_photo_tags) }}</td>
+                            <td>{{ "{:,}".format(user.score) }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="d-flex flex-row justify-content-between mt-auto">
+                <img src={{ search_path + "/bubble(700x100).png" }}>
+                <div id="excluded-disclaimer">* Excluded influencers from slide:<br> no activity, private or removed accounts</div>
+            </div>
+        </div>
+        <div class="d-flex flex-column justify-content-evenly break-after keep-together p-5">
+            <div class="d-flex flex-row mb-2">
+                <div class="heading">Notes</div>
+            </div>
+            <div>- Instagram profile need to be public, private profiles are not tracked. Make sure that influencers keep profiles public.</div>
+            <div>- Photos not tracked if influencer deleted post.</div>
+            <div class="footer">
+                <img src={{ search_path + "/bubble(700x100).png" }}>
+            </div>
+        </div>
+        <div id="end" class="keep-together" style="height: 1000px;">
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    </body>
+</html>

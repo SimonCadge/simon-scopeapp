@@ -1,0 +1,40 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+}
+
+.keep-together {
+    page-break-inside: avoid;
+}
+
+.break-before {
+    page-break-before: always;
+}
+
+.break-after {
+    page-break-after: always;
+}
+
+.heading {
+    font-size: xx-large;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+#title {
+    background-image: url(cover.png);
+    background-repeat: no-repeat;
+    background-position-y: top;
+    background-size: cover;
+}
+
+#end {
+    background-image: url(bubble\(700x240\).png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+}
+
+body {
+    margin: 0;
+}
