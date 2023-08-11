@@ -26,6 +26,7 @@ By default it will create a report for the month of January 2021, but using the 
 ## Prerequisites
 The python virtual environment configured earlier is active.  
 wkhtmltopdf is installed if pdf generation is desired.
+The script should only be called from the root folder of the project. It looks for required files and generates output files relative to the current working directory, so if you call it from somewhere else you'll get strange behaviour.
 ## Basic Usage
 `python bubble_report.py [flags]` - general call signature  
 `python bubble_report.py --create_pdf=True` - e.g. enable pdf generation  
