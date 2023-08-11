@@ -25,7 +25,6 @@ def coerce_str_to_list(str_rep: str) -> List[str]:
     else:
         str_rep = str_rep[2:-2]
         captions = str_rep.split('","')
-        # captions = [s[1:-1] for s in captions]
         return captions
 
 class Post(BaseModel):
@@ -37,6 +36,7 @@ class Post(BaseModel):
     like_count: int
     comment_count: int
 
+    #TODO: Something is missing here. My counts of 'Influencers with activity' and 'Posts' differ from that in the example
     def is_relevant_to_bubbleroom(self) -> bool:
         return "@bubbleroom" in self.caption_text \
             or "bubbleroom" in self.caption_tags \
@@ -136,7 +136,7 @@ def process_posts_for_user(user: User, posts: List[Post]) -> UserStatistics:
                 num_bubbleroom_hashtags += 1
             if post.has_bubbleroomstyle_hashtag():
                 num_bubbleroomstyle_hashtags += 1
-            num_photo_tags += 0 # TODO: What are photo tags?
+            num_photo_tags += 0 # TODO: What are photo tags? https://developers.facebook.com/docs/graph-api/reference/v17.0/photo/tags
     general_engagement = 0.0
     if len(engagements) > 0:
         general_engagement = pystatistics.mean(engagements)
@@ -245,7 +245,7 @@ Command Line Options\n
 \t---\t\t---\t\t\t\t\t\t\t---\t\t\t\t\t\t\t\t\t\t---\n
 \thelp\t\t`-h` or `--help`\t\t\t\t\tdisplay command line documentation\n
 \tcreate_pdf\t`--create_pdf=True` or `--create_pdf=False`\t\tgenerate a pdf output file\t\t\t\t\t\t\t`False`\n
-\tcreate_html\t`--create_html=True` or `--create_html=False`\t\tgenerate an html output file\t\t\t\t\t\t`True`\n
+\tcreate_html\t`--create_html=True` or `--create_html=False`\t\tgenerate an html output file\t\t\t\t\t\t\t`True`\n
 \tstart_date\t`-s "date"` or `--start_date="date"`\t\t\tset start date, accepts strings in ISO 8601 format\t\t\t\t`2021-01-01T00:00:00`\n
 \tend_date\t`-e "date` or `--end_date="date"`\t\t\tset end date, accepts strings in ISO 8601 format\t\t\t\t`2021-01-31T23:59:59`\n
 \tuser_csv\t`-u "file_path"` or `--user_csv="file_path"`\t\tset file path for user csv, path is relative to current working directory\t`users.csv`\n
@@ -269,8 +269,8 @@ Command Line Options\n
         print("Start date must be before End date")
         sys.exit()
 
-    users = parse_users(user_csv)
-    posts_by_user = parse_posts(user_posts_csv, start_date, end_date)
+    users: UsersById = parse_users(user_csv)
+    posts_by_user: PostsById = parse_posts(user_posts_csv, start_date, end_date)
 
     user_statistics = []
     for user_id, user_posts in posts_by_user.items():
