@@ -259,7 +259,7 @@ Command Line Options\n
         elif opt in ("-s", "--start_date"):
             start_date = datetime.fromisoformat(arg)
         elif opt in ("-e", "--end_date"):
-            end = datetime.fromisocalendar(arg)
+            end_date = datetime.fromisoformat(arg)
         elif opt in ("-u", "--user_csv"):
             user_csv = arg
         elif opt in ("-p", "--user_posts_csv"):
